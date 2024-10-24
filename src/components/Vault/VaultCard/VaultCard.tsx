@@ -69,16 +69,35 @@ export default function VaultCard({ vaultAddress }: { vaultAddress: string }) {
 
   if (vaultTypeLoading) return false; // or some other loading state
 
-  const activeVaultType = vaultType
-    ? (vaultType as CairoCustomEnum).activeVariant()
-    : "";
+  /*
+  Seperating the view out like this seperates the data fetching, laoding, and
+  error handling the the UI. This makes it super easy to build testable UI components
+  with mocked data using something like storybook. This one is more of a quality of life/
+  preference thing. The donside is you have to pass a lot more props around. The upside is
+  that you have seperation of concerns.
+  */
+  return (
+    <VaultCardView
+      onCardPressed={() => {
+        router.push(`/vaults/${vaultAddress}`);
+      }}
+      activeVaultType={
+        vaultType ? (vaultType as CairoCustomEnum).activeVariant() : ""
+      }
+      vaultAddress={vaultAddress}
+    />
+  );
+}
 
+function VaultCardView(props: {
+  onCardPressed: () => void;
+  activeVaultType: string;
+  vaultAddress: string;
+}) {
   return (
     <div
       className="col-span-1 w-full border-[1px] border-greyscale-800 rounded-lg hover:cursor-pointer"
-      onClick={() => {
-        router.push(`/vaults/${vaultAddress}`);
-      }}
+      onClick={props.onCardPressed}
     >
       <div className="bg-faded-black rounded-t-lg p-4 text-white">
         <div className="flex flex-row items-center">
@@ -89,10 +108,10 @@ export default function VaultCard({ vaultAddress }: { vaultAddress: string }) {
             }
           </p>
           <div className="bg-primary-800 rounded-full w-[5px] h-[5px] m-2" />
-          <p>{activeVaultType}</p>
+          <p>{props.activeVaultType}</p>
         </div>
         <p className="text-greyscale">
-          {shortenString(vaultAddress)} | {activeVaultType}
+          {shortenString(props.vaultAddress)} | {props.activeVaultType}
         </p>
       </div>
       <div className="flex flex-row w-full ">
