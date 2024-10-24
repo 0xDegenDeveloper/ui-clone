@@ -9,11 +9,11 @@ import VaultCard from "@/components/Vault/VaultCard/VaultCard";
 export default function Home() {
   const vaults = [
     // katana
-    "0x53cfe2f425653698dbe356818dfdb646518db181b1176769c63262f1c1699ce",
+    //"0x53cfe2f425653698dbe356818dfdb646518db181b1176769c63262f1c1699ce",
     // sepolia
-    "0x0115736e919f6825a64431760d228a937680ebae18a672f03b2c996fe1405a68",
+    //"0x0115736e919f6825a64431760d228a937680ebae18a672f03b2c996fe1405a68",
     // other
-    "0x5d3641202cb46479772cfe3be1fa1e3ef15c53c498c8f131fb5762f36470657",
+    //"0x5d3641202cb46479772cfe3be1fa1e3ef15c53c498c8f131fb5762f36470657",
     "0x5d3641202cb46479772cfe3be1fa1e3ef15c53c498c8f131fb5762f36470657",
   ];
 
@@ -23,6 +23,16 @@ export default function Home() {
   const isLoaded = useState(false);
   useEffect(() => {
     if (isLoaded) {
+      /*
+        Websockets can also be managed conviently with tanstack query.
+        The idea being that rather than having the query function be fetching data from an endpoint,
+        you configure the websocket callback functions to set the response of your query to the
+        message received from the server. This way you can manage loading and error states from
+        the websocket the same way you do rpc calls with starknet react.
+
+        Guide: https://blog.logrocket.com/tanstack-query-websockets-real-time-react-data-fetching/
+      */
+
       ws.current = new WebSocket("ws://localhost:8080/subscribeHome");
 
       ws.current.onopen = () => {
