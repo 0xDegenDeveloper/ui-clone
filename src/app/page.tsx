@@ -23,6 +23,16 @@ export default function Home() {
   const isLoaded = useState(false);
   useEffect(() => {
     if (isLoaded) {
+      /*
+        Websockets can also be managed conviently with tanstack query.
+        The idea being that rather than having the query function be fetching data from an endpoint,
+        you configure the websocket callback functions to set the response of your query to the
+        message received from the server. This way you can manage loading and error states from
+        the websocket the same way you do rpc calls with starknet react.
+
+        Guide: https://blog.logrocket.com/tanstack-query-websockets-real-time-react-data-fetching/
+      */
+
       ws.current = new WebSocket("ws://localhost:8080/subscribeHome");
 
       ws.current.onopen = () => {
