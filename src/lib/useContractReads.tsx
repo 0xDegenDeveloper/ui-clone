@@ -3,6 +3,11 @@ import { stat } from "fs";
 import { useMemo } from "react";
 import { Abi, Result } from "starknet";
 
+/*
+when we do this we are losing out on all the great stuff the
+starknet react library is doing, like managing loading and
+error states.
+*/
 const useContractReads = ({
   contractData,
   states,
@@ -17,7 +22,7 @@ const useContractReads = ({
 
   // Iterate over the states array and call useContractRead for each state
   states.forEach((state) => {
-     // eslint-disable-next-line react-hooks/rules-of-hooks
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data } = useContractRead({
       ...contractData,
       functionName: state.functionName,
@@ -36,6 +41,5 @@ const useContractReads = ({
     return { ...results };
   }, [states, contractData, watch]);
 };
-
 
 export default useContractReads;

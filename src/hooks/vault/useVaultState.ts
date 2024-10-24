@@ -36,6 +36,9 @@ const useVaultState = ({
   const { address: accountAddress } = useAccount();
   //Read States
 
+  /*
+  refer to comment in useContractReads hook
+  */
   //States without a param
   const {
     vaultType,
@@ -83,6 +86,9 @@ const useVaultState = ({
     ],
   });
 
+  /*
+  refer to comment in useContractReads hook
+  */
   //Wallet states
   const lpState = useContractReads({
     contractData,
@@ -110,6 +116,10 @@ const useVaultState = ({
     ],
   }) as unknown as LiquidityProviderStateType;
 
+  /*
+  we should simply do this in our individual components. the responses
+  will be cached automatically, and we get the error and loading states.
+  */
   const { data: currentRoundAddress } = useContractRead({
     ...contractData,
     functionName: "get_round_address",
@@ -132,6 +142,11 @@ const useVaultState = ({
 
   const roundAction = useOptionRoundActions(usableString);
 
+  /*
+  memoization is good for things that take a while to compute,
+  but doesnt actually do much for data fetching. The starknet
+  react library already handles caching for us.
+  */
   // Memoize the states and actions
   const selectedRoundState = useMemo(
     () => optionRoundState,
@@ -161,6 +176,14 @@ const useVaultState = ({
     selectedRoundBuyerState,
   });
 
+  /*
+  defaulting everything to zero is fine, but similary to looping through
+  hooks, this is sort of just bypassing what is actually happening.
+  This work, but it will be difficult to have a reactive UI, as the
+  reason the types can be different is due to the whether the data has been fetched.
+  rather than zeroing things out, the types of the variables will be handled as
+  a side effect of handling the loading and error states in the data fetching.
+  */
   return {
     vaultState: {
       address,
